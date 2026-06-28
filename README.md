@@ -71,7 +71,7 @@ Open in order:
 
 |Stage|Predicted|Correct|Accuracy|
 |-|-|-|-|
-|Group stage|—|—|—|
+|Group stage|72|38|52.8%|
 |Round of 32|—|—|—|
 |Round of 16|—|—|—|
 |Quarter-finals|—|—|—|
