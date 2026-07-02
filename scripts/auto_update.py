@@ -63,17 +63,29 @@ def push_result(match):
     away_team  = match['awayTeam']['name']
     home_score = match['score']['fullTime']['home']
     away_score = match['score']['fullTime']['away']
-    date       = match['utcDate'][:10]   # 'YYYY-MM-DD'
+    date       = match['utcDate'][:10]
 
     if home_score is None or away_score is None:
-        return  # score not yet available
+        return
+
+    # Detect if match went to penalties
+    # football-data.org provides penalties score separately
+    pens = match['score'].get('penalties', {})
+    home_pens = pens.get('home')
+    away_pens = pens.get('away')
+
+    pens_winner = None
+    if home_pens is not None and away_pens is not None:
+        # Match went to penalties
+        pens_winner = 'home' if home_pens > away_pens else 'away'
 
     payload = {
-        'home_team':  home_team,
-        'away_team':  away_team,
-        'home_score': home_score,
-        'away_score': away_score,
-        'date':       date,
+        'home_team':   home_team,
+        'away_team':   away_team,
+        'home_score':  home_score,
+        'away_score':  away_score,
+        'date':        date,
+        'pens_winner': pens_winner,   # None if no shootout
     }
 
     try:
@@ -82,7 +94,8 @@ def push_result(match):
             json=payload, timeout=10
         )
         res.raise_for_status()
-        print(f'[{datetime.now()}] ✅ Added: {home_team} {home_score}-{away_score} {away_team}')
+        pens_str = f' (pens: {home_pens}-{away_pens})' if pens_winner else ''
+        print(f'[{datetime.now()}] ✅ Added: {home_team} {home_score}-{away_score} {away_team}{pens_str}')
         posted_match_ids.add(match_id)
         save_posted_ids()
     except Exception as e:
