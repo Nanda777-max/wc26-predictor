@@ -1,0 +1,16 @@
+{
+  "train_rows": 28196,
+  "val_rows": 64,
+  "val_accuracy": 0.5941,
+  "val_logloss": 0.9018,
+  "cv_accuracy_mean": 0.5763,
+  "cv_accuracy_std": 0.0129,
+  "best_n_estimators": 45,
+  "label_classes": [
+    "A",
+    "D",
+    "H"
+  ],
+  "feature_count": 38,
+  "train_cutoff": "2022-11-20"
+}
